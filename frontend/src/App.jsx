@@ -3,6 +3,7 @@ import { Button, Rating, Spinner } from 'flowbite-react';
 
 const App = props => {
   const [movies, setMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchMovies = () => {
@@ -16,13 +17,28 @@ const App = props => {
       });
   }
 
+  const fetchGenres = () => {
+    return fetch('http://localhost:8000/genres')
+      .then(response => response.json())
+      .then(data => {
+        setGenres(data);
+      });
+  }
+
   useEffect(() => {
     fetchMovies();
+    fetchGenres();
   }, []);
 
   return (
     <Layout>
       <Heading />
+
+      <Navbar> 
+        {genres.map((item, key) => (
+          <GenreItem key={key} {...item} />
+        ))}
+      </Navbar>
 
       <MovieList loading={loading}>
         {movies.map((item, key) => (
@@ -56,6 +72,25 @@ const Heading = props => {
     </div>
   );
 };
+
+const Navbar = props => {
+  return (
+    <div>
+      hello
+      {props.children}
+    </div>
+  );
+};
+
+const GenreItem = props => {
+  return (
+    <div>
+      <span>
+        {props.name}
+      </span>
+    </div>
+  )
+}
 
 const MovieList = props => {
   if (props.loading) {
