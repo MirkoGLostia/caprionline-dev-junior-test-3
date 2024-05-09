@@ -23,4 +23,34 @@ class MoviesController extends AbstractController
 
         return new JsonResponse($data, json: true);
     }
+
+    #[Route('/movies/rateASC', methods: ['GET'])]
+    public function listRateAsc(): JsonResponse
+    {
+        $movies = $this->movieRepository->findBy(array(), array('rating' => 'ASC'));
+        $data = $this->serializer->serialize($movies, "json", ["groups" => "default"]);
+
+        return new JsonResponse($data, json: true);
+    
+    }
+
+    #[Route('/movies/rateDESC', methods: ['GET'])]
+    public function listRateDesc(): JsonResponse
+    {
+        $movies = $this->movieRepository->findBy(array(), array('rating' => 'DESC'));
+        $data = $this->serializer->serialize($movies, "json", ["groups" => "default"]);
+
+        return new JsonResponse($data, json: true);
+    
+    }
+
+    #[Route('/movies/release', methods: ['GET'])]
+    public function listReleaseDesc(): JsonResponse
+    {
+        $movies = $this->movieRepository->findBy(array(), array('year' => 'DESC'));
+        $data = $this->serializer->serialize($movies, "json", ["groups" => "default"]);
+
+        return new JsonResponse($data, json: true);
+    
+    }
 }

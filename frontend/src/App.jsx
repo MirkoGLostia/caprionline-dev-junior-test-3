@@ -5,6 +5,14 @@ const App = props => {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const fetchGenres = () => {
+    return fetch('http://localhost:8000/genres')
+      .then(response => response.json())
+      .then(data => {
+        setGenres(data);
+      });
+  }
 
   const fetchMovies = () => {
     setLoading(true);
@@ -17,15 +25,41 @@ const App = props => {
       });
   }
 
-  const fetchGenres = () => {
-    return fetch('http://localhost:8000/genres')
+  const fetchMoviesRateASC = () => {
+    setLoading(true);
+
+    return fetch('http://localhost:8000/movies/rateASC')
       .then(response => response.json())
       .then(data => {
-        setGenres(data);
+        setMovies(data);
+        setLoading(false);
+      });
+  }
+
+  const fetchMoviesRateDESC = () => {
+    setLoading(true);
+
+    return fetch('http://localhost:8000/movies/rateDESC')
+      .then(response => response.json())
+      .then(data => {
+        setMovies(data);
+        setLoading(false);
+      });
+  }
+
+  const fetchMoviesRelease = () => {
+    setLoading(true);
+
+    return fetch('http://localhost:8000/movies/release')
+      .then(response => response.json())
+      .then(data => {
+        setMovies(data);
+        setLoading(false);
       });
   }
 
   useEffect(() => {
+    console.log(movies);
     fetchMovies();
     fetchGenres();
   }, []);
@@ -76,8 +110,23 @@ const Heading = props => {
 const Navbar = props => {
   return (
     <div>
-      hello
-      {props.children}
+      <span>
+        Order By:
+      </span>
+
+
+
+      <label className="relative">
+        <input type="checkbox" className="hidden peer" />
+
+        <div className="cursor-pointer after:content-['▼'] after:text-xs after:ml-1">
+          Categories
+        </div>
+
+        <div className="hidden peer-checked:flex absolute bg-white border">
+          {props.children}
+        </div>
+      </label>
     </div>
   );
 };
